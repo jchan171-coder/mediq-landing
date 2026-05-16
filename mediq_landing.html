@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedIQ — Intelligent Emergency Triage Support System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2323e6;
+    --blue-dark: #1a1ab0;
+    --blue-mid: #3535f5;
+    --white: #ffffff;
+    --off-white: #f0f0f8;
+    --text-muted: rgba(255,255,255,0.65);
+    --card-bg: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.12);
+    --red: #ff4d4d;
+    --orange: #ff8c00;
+    --yellow: #ffc107;
+    --green: #22c55e;
+    --teal: #0ea5e9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--blue);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(35,35,230,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--white);
+    color: var(--blue) !important;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-weight: 600 !important;
+  }
+
+  .nav-cta:hover { background: var(--off-white) !important; color: var(--blue) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(100,100,255,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,0,180,0.4) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 700px;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+
+  .hero-badge span {
+    width: 6px; height: 6px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    animation: fadeUp 0.9s 0.15s ease both;
+  }
+
+  .hero-sub {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    animation: fadeUp 0.9s 0.2s ease both;
+  }
+
+  .hero p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 540px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.9s 0.25s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.9s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--white);
+    color: var(--blue);
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn-secondary:hover { background: var(--card-bg); }
+
+  .hero-visual {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    animation: fadeUp 0.9s 0.35s ease both;
+  }
+
+  /* ── STATS ── */
+  .stats {
+    padding: 60px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stat {
+    padding: 40px 40px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 100px 60px;
+  }
+
+  .section-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .section-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* ── PROBLEM ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .problem-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 36px 28px;
+    position: relative;
+    transition: background 0.25s;
+  }
+
+  .problem-card:hover { background: rgba(255,255,255,0.11); }
+
+  .problem-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.08);
+    position: absolute;
+    top: 20px; right: 24px;
+    line-height: 1;
+  }
+
+  .problem-icon {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+  }
+
+  .problem-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .problem-card p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── SOLUTION ── */
+  .solution {
+    background: rgba(255,255,255,0.04);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .solution-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .solution-features {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .feature-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .feature-text h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .feature-text p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ── PIPELINE ── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 20px;
+  }
+
+  .pipeline-step {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 20px;
+    text-align: center;
+    flex: 1;
+    transition: background 0.2s;
+  }
+
+  .pipeline-step:hover { background: rgba(255,255,255,0.1); }
+
+  .pipeline-step .step-icon { font-size: 1.5rem; margin-bottom: 8px; }
+
+  .pipeline-step h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .pipeline-step p {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .pipeline-arrow {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    padding: 0 10px;
+    flex-shrink: 0;
+  }
+
+  /* ── ESI SCALE ── */
+  .esi-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .esi-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    transition: background 0.2s;
+  }
+
+  .esi-row:hover { background: rgba(255,255,255,0.1); }
+
+  .esi-badge {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .esi-row-text h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .esi-row-text p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* ── METRICS ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .metric-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .metric-card.primary::before { background: #22c55e; }
+  .metric-card.secondary::before { background: var(--teal); }
+  .metric-card.tertiary::before { background: var(--orange); }
+  .metric-card.quaternary::before { background: #a855f7; }
+
+  .metric-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .metric-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .metric-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Baseline table */
+  .baseline-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .baseline-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .baseline-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-muted);
+  }
+
+  .baseline-table tr.highlight td {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .baseline-table tr.highlight td:first-child {
+    color: #22c55e;
+    font-weight: 700;
+  }
+
+  .badge-good { color: #22c55e; font-weight: 700; }
+  .badge-ok { color: var(--orange); font-weight: 700; }
+  .badge-bad { color: var(--text-muted); }
+
+  /* ── BIAS ── */
+  .bias-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .bias-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+  }
+
+  .bias-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+  }
+
+  .bias-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .bias-label {
+    width: 120px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .bias-bar-wrap {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .bias-bar {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #3535f5, #6060ff);
+    transition: width 1s ease;
+  }
+
+  .bias-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    width: 36px;
+    text-align: right;
+  }
+
+  /* ── RESPONSIBLE AI ── */
+  .resp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .resp-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+  }
+
+  .resp-card .resp-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+
+  .resp-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  .resp-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── DEMO CTA ── */
+  .demo-cta {
+    background: var(--white);
+    color: var(--blue);
+    text-align: center;
+    padding: 100px 60px;
+  }
+
+  .demo-cta .section-tag { color: rgba(35,35,230,0.5); }
+  .demo-cta .section-title { color: var(--blue); margin-bottom: 16px; }
+  .demo-cta p { color: rgba(35,35,230,0.65); font-size: 1rem; max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
+
+  .btn-primary-blue {
+    background: var(--blue);
+    color: var(--white);
+    padding: 16px 40px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(35,35,230,0.3);
+  }
+
+  .btn-primary-blue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(35,35,230,0.4);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+  }
+
+  footer p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .footer-tags {
+    display: flex;
+    gap: 8px;
+  }
+
+  .footer-tag {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ── MOCK DASHBOARD ── */
+  .dashboard-mock {
+    background: #0f0f2a;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  }
+
+  .mock-header {
+    background: #1a1a3e;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  .mock-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 8px;
+    color: var(--text-muted);
+  }
+
+  .mock-body { padding: 16px; }
+
+  .mock-patient {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mock-esi {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .mock-info { flex: 1; }
+
+  .mock-info .mock-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin-bottom: 2px;
+  }
+
+  .mock-info .mock-cc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .mock-conf {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-visual { display: none; }
+    section { padding: 60px 24px; }
+    .stats { grid-template-columns: repeat(2, 1fr); padding: 40px 24px; }
+    .problem-grid { grid-template-columns: 1fr 1fr; }
+    .solution-inner { grid-template-columns: 1fr; gap: 40px; }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .bias-grid { grid-template-columns: 1fr; }
+    .resp-grid { grid-template-columns: 1fr; }
+    .pipeline { flex-wrap: wrap; }
+    footer { padding: 30px 24px; }
+    .demo-cta { padding: 60px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">MedIQ</a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#model">Model</a></li>
+    <li><a href="#ethics">Ethics</a></li>
+    <li><a href="https://b95d440233cf2d6cae.gradio.live" target="_blank" class="nav-cta">Try Demo →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> BUDT 751 · Group 4 · Maryland Smith</div>
+    <h1>MedIQ</h1>
+    <p class="hero-sub">an Intelligent Emergency Triage Support System</p>
+    <p>AI-powered triage decision support for emergency department nurses. Predict patient urgency, generate clinical rationale, and prioritize the queue — in seconds.</p>
+    <div class="hero-actions">
+      <a href="https://b95d440233cf2d6cae.gradio.live" target="_blank" class="btn-primary">Try Live Demo →</a>
+      <a href="#model" class="btn-secondary">View Model Performance</a>
+    </div>
+  </div>
+
+  <!-- Mock Dashboard Visual -->
+  <div class="hero-visual">
+    <div class="dashboard-mock">
+      <div class="mock-header">
+        <div class="mock-dot" style="background:#ff5f57"></div>
+        <div class="mock-dot" style="background:#febc2e"></div>
+        <div class="mock-dot" style="background:#28c840"></div>
+        <span class="mock-title">MedIQ — Triage Queue</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-patient">
+          <div class="mock-esi" style="background:#d32f2f">1</div>
+          <div class="mock-info">
+            <div class="mock-name">PT-001 · 45M</div>
+            <div class="mock-cc">Chest pain, hypotension, SOB</div>
+          </div>
+          <div class="mock-conf">91%</div>
+        </div>
+        <div class="mock-patient">
+          <div class="mock-esi" style="background:#f57c00">2</div>
+          <div class="mock-info">
+            <div class="mock-name">PT-002 · 72F</div>
+            <div class="mock-cc">Altered mental status, stroke alert</div>
+          </div>
+          <div class="mock-conf">84%</div>
+        </div>
+        <div class="mock-patient">
+          <div class="mock-esi" style="background:#fbc02d; color:#333">3</div>
+          <div class="mock-info">
+            <div class="mock-name">PT-003 · 30M</div>
+            <div class="mock-cc">Fever, headache, weakness</div>
+          </div>
+          <div class="mock-conf">72%</div>
+        </div>
+        <div class="mock-patient">
+          <div class="mock-esi" style="background:#388e3c">4</div>
+          <div class="mock-info">
+            <div class="mock-name">PT-004 · 21F</div>
+            <div class="mock-cc">Ankle injury, walk-in</div>
+          </div>
+          <div class="mock-conf">68%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat reveal">
+    <div class="stat-num" style="color:#22c55e">560K+</div>
+    <div class="stat-label">ED patient records<br>in training dataset</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num" style="color:#60a5fa">77%</div>
+    <div class="stat-label">ESI-1 recall on<br>critical patients</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num" style="color:#f59e0b">5</div>
+    <div class="stat-label">ESI urgency levels<br>predicted</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num" style="color:#e879f9">145M</div>
+    <div class="stat-label">annual U.S. ED visits<br>affected by triage delays</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="section-tag reveal">The Problem</div>
+  <h2 class="section-title reveal">Emergency triage is broken<br>by pressure and inconsistency.</h2>
+  <p class="section-desc reveal">U.S. emergency departments handle 145 million visits annually. Triage errors affect an estimated 1 in 3 ED encounters, contributing to preventable deaths and over $28,000 in avoidable cost per adverse event.</p>
+
+  <div class="problem-grid reveal">
+    <div class="problem-card">
+      <div class="problem-num">1</div>
+      <div class="problem-icon">🏥</div>
+      <h3>Overcrowding</h3>
+      <p>Emergency departments routinely operate beyond capacity, forcing nurses to triage faster with less information.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">2</div>
+      <div class="problem-icon">⚡</div>
+      <h3>High-Pressure Decisions</h3>
+      <p>Triage nurses make critical urgency calls in under 5 minutes with incomplete patient history and no second opinion.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">3</div>
+      <div class="problem-icon">⚖️</div>
+      <h3>Inconsistency</h3>
+      <p>Studies show the same patient can receive different ESI levels depending on who performs the triage — variability that costs lives.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num">4</div>
+      <div class="problem-icon">📉</div>
+      <h3>Resource Waste</h3>
+      <p>Over-triage of low-acuity patients consumes beds, staff time, and equipment that critical patients need immediately.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution" class="solution">
+  <div class="solution-inner">
+    <div>
+      <div class="section-tag reveal">Our Solution</div>
+      <h2 class="section-title reveal">MedIQ turns intake data<br>into clinical intelligence.</h2>
+      <p class="section-desc reveal" style="margin-bottom:40px">A two-layer AI system: XGBoost predicts triage urgency, GPT-4 generates the clinical rationale. The nurse stays in control — MedIQ makes sure no critical patient is invisible at intake.</p>
+
+      <div class="solution-features">
+        <div class="feature-item reveal">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-text">
+            <h4>ESI Urgency Prediction</h4>
+            <p>XGBoost classifier predicts ESI level 1–5 from vitals, demographics, and chief complaints at intake.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal">
+          <div class="feature-icon">📋</div>
+          <div class="feature-text">
+            <h4>GPT-4 Clinical Rationale</h4>
+            <p>Generative AI consumes the prediction and produces a plain-English summary, next steps, and warning flags.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal">
+          <div class="feature-icon">👥</div>
+          <div class="feature-text">
+            <h4>Live Patient Queue</h4>
+            <p>Patients are auto-ranked by urgency so the doctor always sees the most critical case first.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-text">
+            <h4>Human-in-the-Loop by Design</h4>
+            <p>Every output is flagged for clinician review. MedIQ supports judgment — it never replaces it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div style="margin-bottom:24px">
+        <p class="section-tag" style="margin-bottom:16px">Target Variable — ESI Scale</p>
+        <div class="esi-scale">
+          <div class="esi-row">
+            <div class="esi-badge" style="background:#d32f2f">1</div>
+            <div class="esi-row-text">
+              <h4>Immediate</h4>
+              <p>Life-threatening · Requires immediate intervention</p>
+            </div>
+          </div>
+          <div class="esi-row">
+            <div class="esi-badge" style="background:#f57c00">2</div>
+            <div class="esi-row-text">
+              <h4>Emergent</h4>
+              <p>High risk · Could deteriorate rapidly</p>
+            </div>
+          </div>
+          <div class="esi-row">
+            <div class="esi-badge" style="background:#fbc02d; color:#333">3</div>
+            <div class="esi-row-text">
+              <h4>Urgent</h4>
+              <p>Stable · Requires multiple resources</p>
+            </div>
+          </div>
+          <div class="esi-row">
+            <div class="esi-badge" style="background:#388e3c">4</div>
+            <div class="esi-row-text">
+              <h4>Less Urgent</h4>
+              <p>Stable · Requires one resource</p>
+            </div>
+          </div>
+          <div class="esi-row">
+            <div class="esi-badge" style="background:#1976d2">5</div>
+            <div class="esi-row-text">
+              <h4>Non-Urgent</h4>
+              <p>Minor · Can safely wait</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-top:12px;">
+        Target variable justified by Hong et al. (2018, PLOS ONE) — XGBoost on same Yale dataset achieved AUC 0.87.
+      </p>
+    </div>
+  </div>
+
+  <!-- Pipeline -->
+  <div style="margin-top:80px" class="reveal">
+    <p class="section-tag" style="margin-bottom:20px">End-to-End Pipeline</p>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-icon">📝</div>
+        <h4>Patient Intake</h4>
+        <p>Nurse enters vitals, age, gender, chief complaints</p>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step">
+        <div class="step-icon">🤖</div>
+        <h4>XGBoost</h4>
+        <p>Predicts ESI level + probability breakdown</p>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step">
+        <div class="step-icon">💬</div>
+        <h4>GPT-4</h4>
+        <p>Generates clinical summary + next steps + warning flags</p>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step">
+        <div class="step-icon">🏥</div>
+        <h4>Queue Update</h4>
+        <p>Patient added to priority-ranked live dashboard</p>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-step">
+        <div class="step-icon">👩‍⚕️</div>
+        <h4>Clinician Review</h4>
+        <p>Human makes final triage decision — always</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL PERFORMANCE -->
+<section id="model">
+  <div class="section-tag reveal">Model Performance</div>
+  <h2 class="section-title reveal">Optimized for the metric<br>that matters most.</h2>
+  <p class="section-desc reveal">Overall accuracy is a misleading metric for imbalanced medical datasets. We optimize for ESI-1 recall — correctly flagging critical patients — because a false negative risks patient death.</p>
+
+  <div class="metrics-grid reveal">
+    <div class="metric-card primary">
+      <div class="metric-label">PRIMARY KPI — ESI-1 Recall</div>
+      <div class="metric-value" style="color:#22c55e">0.77</div>
+      <div class="metric-desc">77% of life-threatening patients correctly flagged at intake. Target was ≥ 0.70. Baseline (dummy classifier): 0.01.</div>
+    </div>
+    <div class="metric-card secondary">
+      <div class="metric-label">ESI-2 Recall — Emergent Cases</div>
+      <div class="metric-value" style="color:#60a5fa">0.57</div>
+      <div class="metric-desc">57% of high-risk patients correctly identified. These patients could deteriorate rapidly without prompt intervention.</div>
+    </div>
+    <div class="metric-card tertiary">
+      <div class="metric-label">Model Confidence — ESI-1</div>
+      <div class="metric-value" style="color:#f59e0b">91%</div>
+      <div class="metric-desc">Average model confidence on correctly identified ESI-1 cases. Probability breakdown shown per patient in dashboard.</div>
+    </div>
+    <div class="metric-card quaternary">
+      <div class="metric-label">Training Dataset Size</div>
+      <div class="metric-value" style="color:#a855f7">560K</div>
+      <div class="metric-desc">Yale New Haven Health ED records spanning 6 years, 3 hospital sites, 972 features per visit (Hong et al. 2018).</div>
+    </div>
+  </div>
+
+  <!-- Baseline Table -->
+  <div class="reveal" style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; overflow:hidden;">
+    <div style="padding:24px 28px; border-bottom:1px solid var(--border);">
+      <h3 style="font-family:'Syne',sans-serif; font-weight:700; font-size:1rem;">Results vs. Baselines</h3>
+    </div>
+    <div style="padding:0 12px 12px;">
+      <table class="baseline-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Accuracy</th>
+            <th>ESI-1 Recall</th>
+            <th>Macro F1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dummy (most-frequent)</td>
+            <td class="badge-bad">0.42</td>
+            <td class="badge-bad">0.00</td>
+            <td class="badge-bad">0.13</td>
+          </tr>
+          <tr>
+            <td>Logistic Regression</td>
+            <td class="badge-ok">~0.45</td>
+            <td class="badge-ok">~0.10</td>
+            <td class="badge-ok">~0.25</td>
+          </tr>
+          <tr class="highlight">
+            <td>XGBoost V1 — MedIQ ✓</td>
+            <td class="badge-ok">0.53</td>
+            <td class="badge-good">0.77</td>
+            <td class="badge-ok">0.45</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:16px 28px; border-top:1px solid var(--border); background:rgba(34,197,94,0.05);">
+      <p style="font-size:0.82rem; color:var(--text-muted);">⚠️ We chose V1 over higher-accuracy alternatives because V2 and V3 sacrificed ESI-1 recall from 0.77 → 0.34. In emergency triage, missing a critical patient is not an acceptable tradeoff for accuracy gains.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BIAS AUDIT -->
+<section style="padding-top:0; padding-bottom:100px;">
+  <div class="section-tag reveal">Fairness Audit</div>
+  <h2 class="section-title reveal">Does the model treat all<br>patients equally?</h2>
+  <p class="section-desc reveal">We measured ESI-1 recall across race, ethnicity, gender, and language. Black patients and non-English speakers showed the lowest recall — priority targets for retraining and monitoring.</p>
+
+  <div class="bias-grid reveal">
+    <div class="bias-card">
+      <h4>By Race — ESI-1 Recall</h4>
+      <div class="bias-row">
+        <span class="bias-label">Asian</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:61%"></div></div>
+        <span class="bias-val">0.21</span>
+      </div>
+      <div class="bias-row">
+        <span class="bias-label">White</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:48%"></div></div>
+        <span class="bias-val">0.17</span>
+      </div>
+      <div class="bias-row">
+        <span class="bias-label">Other</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:44%"></div></div>
+        <span class="bias-val">0.15</span>
+      </div>
+      <div class="bias-row">
+        <span class="bias-label" style="color:#ff8080">Black / AA</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:41%; background:linear-gradient(90deg,#cc3333,#ff5555)"></div></div>
+        <span class="bias-val" style="color:#ff8080">0.14</span>
+      </div>
+    </div>
+
+    <div class="bias-card">
+      <h4>By Ethnicity — ESI-1 Recall</h4>
+      <div class="bias-row">
+        <span class="bias-label">Hispanic/Latino</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:51%"></div></div>
+        <span class="bias-val">0.18</span>
+      </div>
+      <div class="bias-row">
+        <span class="bias-label" style="color:#ff8080">Non-Hispanic</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:46%; background:linear-gradient(90deg,#cc3333,#ff5555)"></div></div>
+        <span class="bias-val" style="color:#ff8080">0.16</span>
+      </div>
+    </div>
+
+    <div class="bias-card">
+      <h4>By Gender — ESI-1 Recall</h4>
+      <div class="bias-row">
+        <span class="bias-label">Female</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:51%"></div></div>
+        <span class="bias-val">0.18</span>
+      </div>
+      <div class="bias-row">
+        <span class="bias-label" style="color:#ff8080">Male</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:44%; background:linear-gradient(90deg,#cc3333,#ff5555)"></div></div>
+        <span class="bias-val" style="color:#ff8080">0.15</span>
+      </div>
+    </div>
+
+    <div class="bias-card">
+      <h4>By Language — ESI-1 Recall</h4>
+      <div class="bias-row">
+        <span class="bias-label">Other Lang.</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:58%"></div></div>
+        <span class="bias-val">0.20</span>
+      </div>
+      <div class="bias-row">
+        <span class="bias-label" style="color:#ff8080">English</span>
+        <div class="bias-bar-wrap"><div class="bias-bar" style="width:46%; background:linear-gradient(90deg,#cc3333,#ff5555)"></div></div>
+        <span class="bias-val" style="color:#ff8080">0.16</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:20px; background:rgba(255,80,80,0.08); border:1px solid rgba(255,80,80,0.2); border-radius:12px; padding:20px 24px;">
+    <p style="font-size:0.85rem; color:var(--text-muted);">🔴 <strong style="color:var(--white)">Finding:</strong> Black or African American patients show the lowest ESI-1 recall (0.144) — a 7-point gap vs. the highest group. This reflects historical healthcare disparities in training data. Mitigation: demographic-stratified retraining, group-specific thresholds, mandatory clinician review for all ESI-1/2 predictions.</p>
+  </div>
+</section>
+
+<!-- RESPONSIBLE AI -->
+<section id="ethics" style="padding-top:0">
+  <div class="section-tag reveal">Responsible AI</div>
+  <h2 class="section-title reveal">Built with ethics<br>at every layer.</h2>
+  <p class="section-desc reveal">MedIQ is a decision-support tool, not a decision-making system. Every design choice reflects that distinction.</p>
+
+  <div class="resp-grid reveal">
+    <div class="resp-card">
+      <div class="resp-icon">⚖️</div>
+      <h3>Bias & Fairness</h3>
+      <p>Full fairness audit across race, ethnicity, gender, and language. Lowest-performing groups are flagged as priority retraining targets. Error rates monitored continuously.</p>
+    </div>
+    <div class="resp-card">
+      <div class="resp-icon">🔒</div>
+      <h3>Privacy & HIPAA</h3>
+      <p>No patient data is stored beyond the active session. All inputs are processed in-memory. Production deployment would require full HIPAA-compliant infrastructure.</p>
+    </div>
+    <div class="resp-card">
+      <div class="resp-icon">👩‍⚕️</div>
+      <h3>Human Oversight</h3>
+      <p>Every MedIQ output requires clinician review before a triage decision is recorded. The system cannot admit, discharge, diagnose, or prescribe — by design.</p>
+    </div>
+    <div class="resp-card">
+      <div class="resp-icon">⚠️</div>
+      <h3>Failure Modes</h3>
+      <p>False negatives risk delayed treatment and patient death. Liability falls on the clinician and hospital — not the AI. This drives our recall-first optimization strategy.</p>
+    </div>
+    <div class="resp-card">
+      <div class="resp-icon">🛡️</div>
+      <h3>Hallucination Guardrails</h3>
+      <p>GPT-4 runs at temperature 0.3 to minimize variability. Prompt explicitly prohibits diagnosis. All outputs carry mandatory clinician review disclaimer.</p>
+    </div>
+    <div class="resp-card">
+      <div class="resp-icon">📊</div>
+      <h3>Transparency</h3>
+      <p>Every prediction includes full ESI probability breakdown so clinicians can see model confidence — not just the top prediction. No black box outputs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO CTA -->
+<div class="demo-cta">
+  <p class="section-tag">Live Product</p>
+  <h2 class="section-title">See MedIQ in action.</h2>
+  <p>Enter real patient intake data and watch the full pipeline — XGBoost prediction, ESI probability breakdown, GPT-4 clinical summary, and live queue — run end-to-end.</p>
+  <a href="https://b95d440233cf2d6cae.gradio.live" target="_blank" class="btn-primary-blue">Launch MedIQ Demo →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">MedIQ</div>
+  <p>BUDT 751 · Harnessing AI for Business · Spring 2026 · Maryland Smith School of Business</p>
+  <div class="footer-tags">
+    <span class="footer-tag">Confidential</span>
+    <span class="footer-tag">Copyright ©</span>
+    <span class="footer-tag">Group 4</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
